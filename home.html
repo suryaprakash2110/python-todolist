@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo list </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	
+</head>
+<body>
+    <h1>TO DO LIST</h1>
+    
+    <h4>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </h4>
+    
+    <p><a href="{{ url_for('addUsers') }}">Add Users</a></p>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>AGE</th>
+            <th>CITY</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
+            <th>COMPLETE</th> <!-- Added column for completing task -->
+        </tr>
+        {% for data in datas %}
+            <tr>
+                <td>{{ data.ID }}</td>
+                <td id="name_task_{{ data.ID }}">{{ data.NAME }}</td>
+
+                <td>{{ data.AGE }}</td>
+				<td>{{ data.city }}</td>
+                <td><a href="{{ url_for('editUser', id=data.ID) }}">Edit</a></td>
+                <td><a onclick="return confirm('Are you sure to delete?');" href="{{ url_for('deleteUser', id=data.ID) }}">Delete</a></td>
+				<td id="task_name_{{ data.ID }}"><a onclick="return completeTask({{ data.ID }})" href="{{ url_for('complete', id=data.ID) }}">Complete</a></td>
+
+            </tr>
+        {% endfor %}
+    </table>
+	
+	<script>
+		function completeTask(id) {
+			var taskNameCell = document.getElementById("name_task_" + id);
+			taskNameCell.style.textDecoration = "line-through";
+			return false; 
+		}
+	</script>
+	
+	
+	
+</body>
+</html>
